@@ -1,0 +1,46 @@
+name: CI
+on:
+  push:
+    branches: ["homework"]
+  pull_request:
+    branches: ["homework"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build project
+        run: ./gradlew clean build
+  
+  checkstyle:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Checkstyle
+        uses: nikitasavinov/checkstyle-action@master
+        with:
+          checkstyle_config: './checkstyle.xml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Jacoco
+        run: ./gradlew test jacocoTestReport
+      - name: Upload coverage report
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          name: Coverage report
+          paths: ${{ github.workspace }}/**/build/reports/jacoco/jacocoTestReport.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          update_comment: true       

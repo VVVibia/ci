@@ -28,7 +28,7 @@ jobs:
         with:
           checkstyle_config: './checkstyle.xml'
           fail_on_error: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   coverage:
     needs: build
@@ -45,5 +45,5 @@ jobs:
         with:
           title: Coverage report
           paths: ${{ github.workspace }}/**/build/reports/jacoco/jacocoTestReport.xml
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           update-comment: true

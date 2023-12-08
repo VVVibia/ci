@@ -27,7 +27,8 @@ jobs:
         uses: nikitasavinov/checkstyle-action@master
         with:
           checkstyle_config: './checkstyle.xml'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   coverage:
     needs: build
@@ -44,5 +45,5 @@ jobs:
         with:
           title: Coverage report
           paths: ${{ github.workspace }}/**/build/reports/jacoco/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           update-comment: true

@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+
+  pull_request:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build project
+        run: ./gradlew clean build
+  
+  checkstyle:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Checkstyle
+        uses: nikitasavinov/checkstyle-action@master
+        with:
+          checkstyle_config: config/checkstyle/checkstyle.xml
+          fail_on_error: true
+
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run Coverage
+        run: ./gradlew test jacocoTestReport
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: ${{ github.workspace }}/**/build/reports/jacoco/**/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          title: jacoco
+          update-comment: true

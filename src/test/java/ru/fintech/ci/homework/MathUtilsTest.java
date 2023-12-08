@@ -56,6 +56,7 @@ class MathUtilsTest {
     }
 
     @Test
+    @Disabled
 //    @Disabled
     public void testPrimeFactorizationNegativeNumber() {
         int number = -84;

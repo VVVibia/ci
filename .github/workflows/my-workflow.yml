@@ -4,7 +4,6 @@ on:
 
   pull_request:
 
-  workflow_dispatch:
 
 jobs:
   build:
@@ -26,7 +25,7 @@ jobs:
       - name: Checkstyle
         uses: nikitasavinov/checkstyle-action@master
         with:
-          checkstyle_config: './checkstyle.xml'
+          checkstyle_config: config/checkstyle/checkstyle.xml
           fail_on_error: true
 
   coverage:

@@ -4,6 +4,8 @@ on:
     branches: ["homework"]
   pull_request:
     branches: ["homework"]
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +27,7 @@ jobs:
         uses: nikitasavinov/checkstyle-action@master
         with:
           checkstyle_config: './checkstyle.xml'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   coverage:
     needs: build
@@ -40,7 +42,7 @@ jobs:
       - name: Upload coverage report
         uses: madrapps/jacoco-report@v1.6.1
         with:
-          name: Coverage report
+          title: Coverage report
           paths: ${{ github.workspace }}/**/build/reports/jacoco/jacocoTestReport.xml
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          update_comment: true       
+          token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true

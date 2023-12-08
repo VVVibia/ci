@@ -36,7 +36,8 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3, actions/download-artifact@master
+        uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
         with:
           name: jacoco
           path: build/jacoco
